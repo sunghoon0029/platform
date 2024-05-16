@@ -1,7 +1,7 @@
 package com.project.platform.service;
 
-import com.project.platform.dto.request.UserRequest;
-import com.project.platform.dto.response.UserResponse;
+import com.project.platform.dto.request.user.UserRequest;
+import com.project.platform.dto.response.user.UserResponse;
 import com.project.platform.entity.User;
 import com.project.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

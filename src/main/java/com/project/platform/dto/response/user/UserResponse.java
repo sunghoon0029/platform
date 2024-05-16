@@ -1,4 +1,4 @@
-package com.project.platform.dto.response;
+package com.project.platform.dto.response.user;
 
 import com.project.platform.entity.User;
 import lombok.Builder;

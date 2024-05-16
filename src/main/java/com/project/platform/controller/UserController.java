@@ -1,7 +1,7 @@
 package com.project.platform.controller;
 
-import com.project.platform.dto.request.UserRequest;
-import com.project.platform.dto.response.UserResponse;
+import com.project.platform.dto.request.user.UserRequest;
+import com.project.platform.dto.response.user.UserResponse;
 import com.project.platform.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

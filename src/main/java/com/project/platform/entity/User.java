@@ -1,6 +1,6 @@
 package com.project.platform.entity;
 
-import com.project.platform.dto.request.UserRequest;
+import com.project.platform.dto.request.user.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
