@@ -1,6 +1,5 @@
 package com.project.platform.entity;
 
-import com.project.platform.dto.request.user.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,8 +28,14 @@ public class User extends BaseTime {
     @Column
     private String password;
 
-    public void update(UserRequest request) {
-        this.name = request.getName();
-        this.password = request.getPassword();
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
