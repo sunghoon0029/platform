@@ -2,8 +2,8 @@ package com.project.platform.config;
 
 import com.project.platform.security.CustomAccessDeniedHandler;
 import com.project.platform.security.CustomAuthenticationEntryPoint;
-import com.project.platform.security.jwt.JwtAuthenticationFilter;
 import com.project.platform.security.jwt.JwtProvider;
+import com.project.platform.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+    private final RedisUtil redisUtil;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
 
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .apply(new JwtSecurityConfig(jwtProvider, redisUtil));
         return http.build();
     }
 
