@@ -31,11 +31,23 @@ public class User extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column
+    private String provider;
+
+    @Column
+    private String providerId;
+
     public void updateName(String name) {
         this.name = name;
     }
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public User update(String name) {
+        this.name = name;
+
+        return this;
     }
 }

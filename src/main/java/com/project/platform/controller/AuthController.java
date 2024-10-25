@@ -1,6 +1,7 @@
 package com.project.platform.controller;
 
 import com.project.platform.dto.request.auth.LoginRequest;
+import com.project.platform.dto.request.auth.LogoutRequest;
 import com.project.platform.dto.request.auth.ReissueRequest;
 import com.project.platform.security.jwt.Token;
 import com.project.platform.service.AuthService;
@@ -25,9 +26,9 @@ public class AuthController {
         return ResponseEntity.ok(authService.reissue(request));
     }
 
-    @DeleteMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody Token token) {
-        authService.logout(token);
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+        authService.logout(request);
         return ResponseEntity.ok("로그아웃 완료");
     }
 }

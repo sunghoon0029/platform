@@ -1,6 +1,7 @@
 package com.project.platform.service;
 
 import com.project.platform.dto.request.auth.LoginRequest;
+import com.project.platform.dto.request.auth.LogoutRequest;
 import com.project.platform.dto.request.auth.ReissueRequest;
 import com.project.platform.entity.User;
 import com.project.platform.repository.RefreshTokenRepository;
@@ -65,16 +66,16 @@ public class AuthService {
                 .build();
     }
 
-    public void logout(Token token) {
-        if (!jwtProvider.validateToken(token.getAccessToken())) {
+    public void logout(LogoutRequest request) {
+        if (!jwtProvider.validateToken(request.getAccessToken())) {
             throw new IllegalArgumentException("유효하지 않은 인증정보 입니다.");
         }
 
-        RefreshToken refreshToken = refreshTokenRepository.findById(token.getRefreshToken())
+        RefreshToken refreshToken = refreshTokenRepository.findById(request.getRefreshToken())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 인증정보 입니다."));
         refreshTokenRepository.delete(refreshToken);
 
-        Long expiration = jwtProvider.getExpiration(token.getAccessToken());
-        redisUtil.setBlackList(token.getAccessToken(), "logout", expiration);
+        Long expiration = jwtProvider.getExpiration(request.getAccessToken());
+        redisUtil.setBlackList(request.getAccessToken(), "logout", expiration);
     }
 }

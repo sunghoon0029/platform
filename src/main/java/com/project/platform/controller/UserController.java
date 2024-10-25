@@ -5,6 +5,7 @@ import com.project.platform.dto.response.user.UserResponse;
 import com.project.platform.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,11 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<UserResponse> findByEmail(@PathVariable String email) throws Exception {
         return ResponseEntity.ok(userService.findByEmail(email));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> profile(Authentication authentication) throws Exception {
+        return ResponseEntity.ok(userService.profile(authentication));
     }
 
     @PutMapping("/{email}")

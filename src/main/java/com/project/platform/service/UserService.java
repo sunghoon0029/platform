@@ -6,6 +6,7 @@ import com.project.platform.entity.Role;
 import com.project.platform.entity.User;
 import com.project.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class UserService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(Role.USER)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -49,6 +50,18 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole().name())
+                .build();
+    }
+
+    public UserResponse profile(Authentication authentication) throws Exception {
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("사용자 정보를 찾을 수 없습니다."));
+
+        return UserResponse.builder()
+                .name(user.getName())
+                .email(user.getEmail())
                 .build();
     }
 

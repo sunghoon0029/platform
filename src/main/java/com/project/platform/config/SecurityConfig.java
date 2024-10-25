@@ -3,6 +3,8 @@ package com.project.platform.config;
 import com.project.platform.security.CustomAccessDeniedHandler;
 import com.project.platform.security.CustomAuthenticationEntryPoint;
 import com.project.platform.security.jwt.JwtProvider;
+import com.project.platform.security.oauth2.*;
+import com.project.platform.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.project.platform.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,11 +25,18 @@ public class SecurityConfig {
     private final RedisUtil redisUtil;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .and()
 
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -38,12 +47,14 @@ public class SecurityConfig {
 //                .anyRequest().authenticated()
                 .and()
 
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .accessDeniedHandler(customAccessDeniedHandler)
+                .oauth2Login()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
                 .and()
 
                 .apply(new JwtSecurityConfig(jwtProvider, redisUtil));
+
         return http.build();
     }
 

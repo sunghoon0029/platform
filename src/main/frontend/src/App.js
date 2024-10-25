@@ -1,20 +1,26 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import OAuth2Redirect from "./components/OAuth2Redirect";
+import Profile from "./pages/Profile";
+// import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
-  const [hello, setHello] = useState('');
-
-  useEffect(() => {
-    axios.get('http://localhost:8080/api/test')
-    .then((res) => {
-      setHello(res.data);
-    })
-  }, []);
-
+const App = () => {
   return (
-    <div className="App">
-      BackEnd Data : {hello}
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+
+        <Route path="/oauth2/redirect" element={<OAuth2Redirect />} />
+      </Routes>
+    </Router>
   );
 }
 
