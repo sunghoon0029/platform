@@ -5,7 +5,7 @@ import { Avatar, Box, Button, Container, TextField, Typography } from '@mui/mate
 import PersonIcon from '@mui/icons-material/Person';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { login, reset } from '../features/authSlice';
+import { login, reset } from '../store/reducers/authSlice';
 import OAuth2Login from '../components/OAuth2Login';
 
 const Login = () => {
@@ -83,7 +83,7 @@ const Login = () => {
                 />
                 {error && (
                     <Typography color="error" sx={{ mt: 2 }}>
-                        {error.message || '로그인 실패'}
+                        {error.message || '이메일 또는 비밀번호가 일치하지 않습니다.'}
                     </Typography>
                 )}
                 <Button

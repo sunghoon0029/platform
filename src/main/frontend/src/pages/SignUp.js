@@ -5,7 +5,7 @@ import { Avatar, Box, Button, Container, TextField, Typography } from '@mui/mate
 import PersonIcon from '@mui/icons-material/Person';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, signup } from '../features/userSlice';
+import { reset, signup } from '../store/reducers/userSlice';
 
 const SignUp = () => {
     const dispatch = useDispatch();

@@ -6,10 +6,7 @@ export const login = createAsyncThunk(
     async (body, { rejectWithValue }) => {
         try {
             const res = await axios.post('http://localhost:8080/auth/login', body);
-            const { accessToken, refreshToken } = res.data;
 
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response.data);
@@ -19,18 +16,13 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'auth/logout',
-    async(isOAuth2, { rejectWithValue, dispatch }) => {
+    async (isOAuth2, { getState, dispatch, rejectWithValue }) => {
         try {
+            const { auth } = getState();
+            const { accessToken, refreshToken } = auth;
+
             if (!isOAuth2) {
-                const accessToken = localStorage.getItem('accessToken');
-                const refreshToken = localStorage.getItem('refreshToken');
-
                 await axios.post('http://localhost:8080/auth/logout', { accessToken, refreshToken });
-
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-            } else {
-                localStorage.removeItem('accessToken');
             }
 
             dispatch(reset());
@@ -43,7 +35,8 @@ export const logout = createAsyncThunk(
 const initialState = {
     isOAuth2: false,
     isAuthenticated: false,
-    accessToken: localStorage.getItem('accessToken') || null,
+    accessToken: null,
+    refreshToken: null,
     status: 'idle',
     error: null,
 };
@@ -56,6 +49,7 @@ export const authSlice = createSlice({
             state.isOAuth2 = false;
             state.isAuthenticated = false;
             state.accessToken = null;
+            state.refreshToken = null;
             state.status = 'idle';
             state.error = null;
         },
@@ -74,6 +68,7 @@ export const authSlice = createSlice({
                 state.status = 'succeeded';
                 state.isAuthenticated = true;
                 state.accessToken = action.payload.accessToken;
+                state.refreshToken = action.payload.refreshToken;
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = 'failed';
@@ -84,6 +79,7 @@ export const authSlice = createSlice({
                 state.isOAuth2 = false;
                 state.isAuthenticated = false;
                 state.accessToken = null;
+                state.refreshToken = null;
                 state.error = null;
             })
             .addCase(logout.rejected, (state, action) => {
