@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 
 import authReducer from './reducers/authSlice';
 import userReducer from './reducers/userSlice';
+import boardReducer from './reducers/boardSlice';
 
 const persistConfig = {
     key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
+    board: boardReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
