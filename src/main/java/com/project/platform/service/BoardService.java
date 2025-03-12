@@ -46,6 +46,21 @@ public class BoardService {
                 .map(BoardListResponse::toDTO);
     }
 
+    public BoardResponse findById(Long id) throws Exception {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new Exception("게시글 정보를 찾을 수 없습니다."));
+
+        return BoardResponse.toDTO(board);
+    }
+
+    public void incrementView(Long id) throws Exception {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new Exception("게시글 정보를 찾을 수 없습니다."));
+
+        board.incrementView();
+        boardRepository.save(board);
+    }
+
     public BoardResponse findByTitle(String title) throws Exception {
         Board board = boardRepository.findByTitle(title)
                 .orElseThrow(() -> new Exception("게시글 정보를 찾을 수 없습니다."));
@@ -53,18 +68,28 @@ public class BoardService {
         return BoardResponse.toDTO(board);
     }
 
-    public BoardResponse update(String title, BoardRequest request) throws Exception {
-        Board board = boardRepository.findByTitle(title)
+    @Transactional
+    public BoardResponse update(Long id, BoardRequest request) throws Exception {
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new Exception("게시글 정보를 찾을 수 없습니다."));
 
         board.update(request);
-        boardRepository.save(board);
 
         return BoardResponse.toDTO(board);
     }
 
+//    public BoardResponse update(String title, BoardRequest request) throws Exception {
+//        Board board = boardRepository.findByTitle(title)
+//                .orElseThrow(() -> new Exception("게시글 정보를 찾을 수 없습니다."));
+//
+//        board.update(request);
+//        boardRepository.save(board);
+//
+//        return BoardResponse.toDTO(board);
+//    }
+
     @Transactional
-    public void delete(String title) {
-        boardRepository.deleteByTitle(title);
+    public void delete(Long id) {
+        boardRepository.deleteById(id);
     }
 }

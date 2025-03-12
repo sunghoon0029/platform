@@ -41,4 +41,8 @@ public class Board extends BaseTime {
         this.title = request.getTitle();
         this.contents = request.getContents();
     }
+
+    public void incrementView() {
+        this.view++;
+    }
 }

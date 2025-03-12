@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchBoards } from '../../store/reducers/boardSlice';
-import { Alert, Box, Button, CircularProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Alert, Box, Button, CircularProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import dayjs from 'dayjs';
+
+import { fetchBoards } from '../../store/reducers/boardSlice';
 
 const BoardList = ({ type }) => {
     const dispatch = useDispatch();
@@ -13,30 +16,33 @@ const BoardList = ({ type }) => {
 
     const [page, setPage] = useState(1);
 
+    const handleBoardDetail = (id) => {
+        navigate(`/board/${id}`);
+    };
+
+    const handleCreateBoard = () => {
+        navigate(type ? `/create-board?type=${type}` : '/create-board');
+    };
+
+    const handlePageChange = (_, value) => {
+        setPage(value);
+    };
+
     useEffect(() => {
         dispatch(fetchBoards({ page: page - 1, size: 5, type: type }));
     }, [dispatch, page, type]);
 
-    const handleCreateBoard = () => {
-        if (type) {
-            navigate(`/create-board?type=${type}`);
-        } else {
-            navigate('/create-board');
-        }
+    const formatDate = (date) => {
+        const now = dayjs();
+        const boardDate = dayjs(date);
+
+        return boardDate.isSame(now, 'day')
+            ? boardDate.format('HH:mm')
+            : boardDate.format('YYYY.MM.DD');
     };
 
-    const handlePageChange = (event, value) => {
-        setPage(value);
-    };
-
-    const headerStyle = {
-        fontWeight: 'bold',
-        textAlign: 'center',
-    };
-
-    const bodyStyle = {
-        textAlign: 'center',
-    };
+    const headerStyle = { fontWeight: 'bold', textAlign: 'center' };
+    const bodyStyle = { textAlign: 'center' };
 
     if (status === 'pending') return <CircularProgress />;
 
@@ -63,9 +69,18 @@ const BoardList = ({ type }) => {
                     {boards.map((board) => (
                         <TableRow key={board.id}>
                             <TableCell sx={bodyStyle}>{board.id}</TableCell>
-                            <TableCell>{board.title}</TableCell>
+                            <TableCell
+                                sx={{
+                                    cursor: 'pointer',
+                                    textDecoration: 'none',
+                                    '&:hover': { textDecoration: 'underline' }
+                                }}
+                                onClick={() => handleBoardDetail(board.id)}
+                            >
+                                {board.title}
+                            </TableCell>
                             <TableCell sx={bodyStyle}>{board.author}</TableCell>
-                            <TableCell sx={bodyStyle}>{new Date(board.createdDate).toLocaleDateString()}</TableCell>
+                            <TableCell sx={bodyStyle}>{formatDate(board.createdDate)}</TableCell>
                             <TableCell sx={bodyStyle}>{board.view}</TableCell>
                         </TableRow>
                     ))}

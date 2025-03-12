@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/reducers/authSlice';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const { isOAuth2, isAuthenticated } = useSelector((state) => state.auth);
 
   const handleLogout = async () => {

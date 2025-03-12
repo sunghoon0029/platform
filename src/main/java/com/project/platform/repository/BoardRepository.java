@@ -12,5 +12,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByType(BoardType type, Pageable pageable);
 
     Optional<Board> findByTitle(String title);
-    Optional<Board> deleteByTitle(String title);
 }

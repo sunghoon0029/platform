@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { createBoard } from '../../store/reducers/boardSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Alert, Box, Button, MenuItem, TextField } from '@mui/material';
+
+import { createBoard } from '../../store/reducers/boardSlice';
 
 const CreateBoard = () => {
     const dispatch = useDispatch();
@@ -16,9 +18,9 @@ const CreateBoard = () => {
     const { status, error } = useSelector((state) => state.board);
 
     const [body, setBody] = useState({
-        title: '',
-        contents: '',
-        type: boardType,
+        title: "",
+        contents: "",
+        type: boardType ?? "",
     });
 
     const handleChange = (e) => {

@@ -37,19 +37,36 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/{title}")
-    public ResponseEntity<BoardResponse> findByTitle(@PathVariable String title) throws Exception {
-        return ResponseEntity.ok(boardService.findByTitle(title));
+    @GetMapping("/{id}")
+    public ResponseEntity<BoardResponse> findById(@PathVariable Long id) throws Exception {
+        return ResponseEntity.ok(boardService.findById(id));
     }
 
-    @PutMapping("/{title}")
-    public ResponseEntity<BoardResponse> update(@PathVariable String title, @RequestBody BoardRequest request) throws Exception {
-        return ResponseEntity.ok(boardService.update(title, request));
+    @PostMapping("/{id}/increment-view")
+    public ResponseEntity<Void> incrementView(@PathVariable Long id) throws Exception {
+        boardService.incrementView(id);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{title}")
-    public ResponseEntity<String> delete(@PathVariable String title) {
-        boardService.delete(title);
+
+//    @GetMapping("/{title}")
+//    public ResponseEntity<BoardResponse> findByTitle(@PathVariable String title) throws Exception {
+//        return ResponseEntity.ok(boardService.findByTitle(title));
+//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BoardResponse> update(@PathVariable Long id, @RequestBody BoardRequest request) throws Exception {
+        return ResponseEntity.ok(boardService.update(id, request));
+    }
+
+//    @PutMapping("/{title}")
+//    public ResponseEntity<BoardResponse> update(@PathVariable String title, @RequestBody BoardRequest request) throws Exception {
+//        return ResponseEntity.ok(boardService.update(title, request));
+//    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        boardService.delete(id);
         return ResponseEntity.ok("게시글 삭제 완료");
     }
 }
